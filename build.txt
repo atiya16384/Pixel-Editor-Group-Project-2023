@@ -1,0 +1,4 @@
+# More information supplied in READMEmd
+mvn clean compile
+mvn package
+java -jar target/pixel-editor-[Version]-with-dependencies.jar

@@ -1,0 +1,198 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.group31.editor</groupId>
+  <artifactId>pixel-editor</artifactId>
+  <packaging>jar</packaging>
+  <version>${revision}</version>
+  <name>pixel-editor</name>
+  <url>http://maven.apache.org</url>
+
+  <repositories>
+    <repository>
+      <id>nuiton</id>
+      <name>Nuiton Nexus</name>
+      <url>https://nexus.nuiton.org/nexus/service/local/repositories/thirdparty/content/</url>
+    </repository>
+    <!-- <repository>
+      <id>gitlab-maven</id>
+      <url>${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/maven</url>
+    </repository> -->
+  </repositories>
+
+  <!-- <distributionManagement>
+    <repository>
+      <id>gitlab-maven</id>
+      <url>${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/maven</url>
+    </repository>
+    <snapshotRepository>
+      <id>gitlab-maven</id>
+      <url>${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/maven</url>
+    </snapshotRepository>
+  </distributionManagement> -->
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
+    <revision>v0.3-CANARY</revision>
+  </properties>
+
+  <dependencies>
+    <!-- mvnrepository.com/artifact/org.processing/core --> 
+
+    <dependency> 
+      <groupId>org.processing</groupId> 
+      <artifactId>core</artifactId> 
+      <version>2.2.1</version> 
+    </dependency>
+
+    <dependency>
+      <groupId>org.sonarsource.xml</groupId>
+      <artifactId>xml</artifactId>
+      <version>2.7.0.3820</version>
+      <type>pom</type>
+    </dependency>
+
+    <dependency>
+      <groupId>com.miglayout</groupId>
+      <artifactId>miglayout</artifactId>
+      <version>3.7.4</version>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
+    <dependency>
+        <groupId>commons-io</groupId>
+        <artifactId>commons-io</artifactId>
+        <version>2.11.0</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.apache.maven.doxia/doxia-core -->
+    <dependency>
+        <groupId>org.apache.maven.doxia</groupId>
+        <artifactId>doxia-core</artifactId>
+        <version>2.0.0-M4</version>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/org.apache.maven.doxia/doxia-site-renderer -->
+    <dependency>
+        <groupId>org.apache.maven.doxia</groupId>
+        <artifactId>doxia-site-renderer</artifactId>
+        <version>2.0.0-M4</version>
+    </dependency>
+
+    <dependency>
+      <groupId>io.sentry</groupId>
+      <artifactId>sentry</artifactId>
+      <version>6.15.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-text</artifactId>
+      <version>1.10.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.formdev</groupId>
+      <artifactId>flatlaf</artifactId>
+      <version>3.0</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>com.formdev</groupId>
+      <artifactId>svgSalamander</artifactId>
+      <version>1.1.2.4</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.13.2</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <!-- Code coverage -->
+      <!--TODO-->
+
+      <!-- Surefire JUnit XML output -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.0.0-M7</version>
+      </plugin>
+
+      <!-- Maven jar plugin, replace for onejar solution -->
+      <plugin> 
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.1.0</version>
+        <configuration>
+          <archive>
+            <manifest>
+              <!-- give full qualified name of your main class-->
+              <mainClass>com.group31.editor.Editor</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <configuration>
+          <descriptorRefs>
+            <descriptorRef>jar-with-dependencies</descriptorRef>
+          </descriptorRefs>
+          <archive>
+            <manifest>
+              <mainClass>com.group31.editor.Editor</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
+        <executions>
+          <execution>
+            <id>make-assembly</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>com.hubspot.maven.plugins</groupId>
+          <artifactId>prettier-maven-plugin</artifactId>
+          <!-- Find the latest version at https://github.com/jhipster/prettier-java/releases -->
+          <version>0.18</version>
+          <configuration>
+            <prettierJavaVersion>2.0.0</prettierJavaVersion>
+            <printWidth>80</printWidth>
+            <tabWidth>2</tabWidth>
+            <useTabs>false</useTabs>
+            <ignoreConfigFile>false</ignoreConfigFile>
+            <ignoreEditorConfig>true</ignoreEditorConfig>
+            <!-- Use <inputGlobs> to override the default input patterns -->
+            <inputGlobs>
+              <!-- These are the default patterns, you can omit <inputGlobs> entirely unless you want to override them -->
+              <inputGlob>src/main/java/**/*.java</inputGlob>
+              <!-- <inputGlob>src/test/java/**/*.java</inputGlob> -->
+            </inputGlobs>
+          </configuration>
+          <!--<executions>
+            <execution>
+              <phase>validate</phase>
+              <goals>
+                <goal>${plugin.prettier.goal}</goal>
+              </goals>
+            </execution>
+          </executions>-->
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

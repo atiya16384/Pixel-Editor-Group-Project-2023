@@ -1,0 +1,231 @@
+@startuml PixelEditor
+title "Pixel Editor"
+allow_mixing
+
+class Editor {
+    -Canvas canvas
+    -UIFrame frame
+    +void main(String[])
+}
+
+() "Java.util.Color" as jc
+class Colour extends jc
+
+' Canvas
+component "Canvas" as cvs {
+    class Canvas {
+        -Graphics2D g2Dbody
+        -UIFrame ui
+        #Integer[] currentFocus
+        #Double scale
+        +void setPixel(Integer, Integer)
+        +void setPixelBlock(Integer[], Integer[]) // Sets everything between two X,Y co-ords
+        +void updateView(Double, Integer[]) // Scale + View focus
+    }
+}
+
+' History
+component "History" as history {
+    class HistoryManager {
+        -Canvas canvas
+        +void saveChange(Canvas)
+        +void undo()
+        +void redo()
+        +String[] getHistoryLog()
+    }
+}
+
+' UI
+component "User Interface" as ui {
+    () "javax.swing.JFrame" as jfr
+    () "javax.swing.JMenuBar" as jbr
+    () "javax.swing.JMenuItem" as jmi
+
+    class UIRuler {
+        -Boolean visibleState
+    }
+
+    class UIGrid {
+        -Boolean visibleState
+    }
+    
+    class UIFrame extends jfr  {
+        -Integer windowsHeight
+        -Integer windowWidth
+        -MenuBar menu
+        -CursorTools cursor
+        -UIRuler ruler
+        -UIGrid grid
+    }
+
+    class MenuBar extends jbr{
+        -JMenu[] menuElements
+    }
+
+    class MenuButton extends jmi {
+        -JButton button
+    }
+
+    class ToolButton extends MenuButton {
+        -JButton button
+        -Tool tool
+    }
+
+    class CursorTools {
+        -UIFrame ui
+        +Integer[] getCursorXY()
+        +void setCursorIcon(Path)
+    }
+}
+
+
+' File & I/O
+component "File & I/O" as io {
+    interface FileManagement {
+        +Object importData(Path)
+        +Object exportData(Path, Object, Canvas)
+            // File Location , Options
+    }
+
+    class FileHandler implements FileManagement {
+        +Object importData(Path)
+        +Object exportData(Path, Object, Canvas)
+    }
+
+    class BMPTools extends FileHandler {
+        +Object exportOptions(Integer) // Colour Depth
+    }
+
+    class JPEGTools extends FileHandler {
+        +Object exportOptions(Double) // Compression Rate
+    }
+
+    class PNGTools extends FileHandler {
+        +Object exportOptions(Boolean) // Transparency enabled
+    }
+
+    frame "File" as f
+    f<->FileHandler
+}
+
+component "Tools" as tools {
+    ' Tools
+    interface ToolDefaults as "ToolInterface" <<tool>> {
+        -String interfaceName
+        -Path toolIcon
+        +enum TOOL_CATEGORY ->
+            [DEFAULT, BRUSH, FILL, SELECTION, DRAWING]
+        +enum SHAPE ->
+            [SQUARE, CIRCLE, RECTANGLE]
+        +void setTool()
+    }
+
+    class Tool implements ToolDefaults {
+        #TOOL_CATEGORY Default
+        -String interfaceName
+        -Path toolIcon
+        -void setName(String)
+        -void setIcon(String)
+        +void use()
+            // Placeholder for override - similar to Thread.run()
+        +void setTool()
+    }
+
+    class ManipulationUtils extends Tool {
+        -SelectionArea selection
+        +void rotate(Double)
+        +void mirrorVertical()
+        +void mirrorHorizontal()
+    }
+
+    ' Brush
+    class Brush extends Tool{
+        #TOOL_CATEGORY Brush
+        -Colour colour
+        #Double scale
+        +void setScale(Double)
+        +void setColour(Colour)
+        +void ^use()
+    }
+
+    class Eraser extends Brush{
+        #TOOL_CATEGORY Correction
+        - Colour colour : #00000
+        -void setColor(Colour) -> false
+    }
+
+    ' Colour utils
+    class ColourUtils extends Tool {
+        #TOOL_CATEGORY Colour
+        -Tool currentTool
+        +void setColour(Colour)
+        +void ^use()
+    }
+    class Pipette extends ColourUtils {
+        +void ^use()
+    }
+
+    ' Rendered text/shapes
+    class SpawnShape extends Tool {
+        #TOOL_CATEGORY Drawing
+        +void draw(SHAPE, Integer[])
+            // Shape enmu and centre of spawn co-ords
+        +void ^use()
+    }
+    class SpawnText extends Tool {
+        #TOOL_CATEGORY Drawing
+        +void draw(String, Integer[])
+            // Text and centre of spawn co-ords
+        +void ^use()
+    }
+
+    ' Fill
+    class BackgroundFill extends Tool {
+        #TOOL_CATEGORY Fill
+        +setBackground(Colour, Integer[])
+        +void ^use()
+    }
+    class SelectionFill extends Tool {
+        #TOOL_CATEGORY Fill
+        +void fill(Colour, SelectionArea)
+        +void ^use()
+    }
+
+    ' Selection Tools
+    component "Selection Tools" as selec {
+        class SelectionArea {
+            -Integer[][] positions
+            +void addPosition(Integer[])
+            +Integer[][] getPositionList()
+        }
+
+        class Selection extends Tool {
+            #TOOL_CATEGORY Selection
+            - SelectionArea currentSelection
+            +void select()
+            +void ^use()
+        }
+
+        class LassoSelect extends Selection {
+            +^void select()
+        }
+
+        class RectangleSelect extends Selection {
+            +^void select()
+        }
+
+        class PixelMove extends Selection {
+            -Canvas canvas
+            -SelectionArea source
+            +^void select()
+        }
+
+        class CutPaste extends Selection {
+            -Canvas canvas
+            -SelectionArea source
+            -SelectionArea destination : null
+            +^void select()
+        }
+    }
+}
+@enduml

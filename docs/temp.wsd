@@ -1,0 +1,25 @@
+@startuml PixelEditor
+title "C;BMPTools"
+allow_mixing
+
+' File & I/O
+component "File & I/O" as io {
+    interface FileManagement {
+        +Object importData(Path)
+        +Object exportData(Path, Object, Canvas)
+            // File Location , Options
+    }
+
+    class FileHandler implements FileManagement {
+        +Object importData(Path)
+        +Object exportData(Path, Object, Canvas)
+    }
+
+    class BMPTools extends FileHandler {
+        +Object exportOptions(Integer) // Colour Depth
+    }
+
+    frame "File" as f
+    f<->FileHandler
+}
+@enduml

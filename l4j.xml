@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch4jConfig>
+  <dontWrapJar>false</dontWrapJar>
+  <headerType>gui</headerType>
+  <jar>C:\Users\Terri\Downloads\pixel-editor-v0.2.428-SNAPSHOT.jar</jar>
+  <outfile>C:\Users\Terri\Downloads\Pixel Editor (0.2.428-SNAPSHOT).exe</outfile>
+  <errTitle></errTitle>
+  <cmdLine></cmdLine>
+  <chdir>.</chdir>
+  <priority>normal</priority>
+  <downloadUrl></downloadUrl>
+  <supportUrl></supportUrl>
+  <stayAlive>true</stayAlive>
+  <restartOnCrash>false</restartOnCrash>
+  <manifest></manifest>
+  <icon>C:\Users\Terri\Downloads\AppIcon.ico</icon>
+  <jre>
+    <path>%JAVA_HOME%;%PATH%</path>
+    <requiresJdk>false</requiresJdk>
+    <requires64Bit>false</requires64Bit>
+    <minVersion></minVersion>
+    <maxVersion></maxVersion>
+  </jre>
+  <versionInfo>
+    <fileVersion>0.2.248.0</fileVersion>
+    <txtFileVersion>v0.2.248-SNAPSHOT</txtFileVersion>
+    <fileDescription>Pixel Editor</fileDescription>
+    <copyright>Group 31</copyright>
+    <productVersion>0.2.248.0</productVersion>
+    <txtProductVersion>v0.2.248-SNAPSHOT</txtProductVersion>
+    <productName>Pixel Editor</productName>
+    <companyName>Group 31</companyName>
+    <internalName>PE</internalName>
+    <originalFilename>pixel-editor-v0.2.248-SNAPSHOT.jar.exe</originalFilename>
+    <trademarks></trademarks>
+    <language>ENGLISH_UK</language>
+  </versionInfo>
+</launch4jConfig>

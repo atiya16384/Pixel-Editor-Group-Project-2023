@@ -1,0 +1,10 @@
+{
+    "maven.view": "flat",
+    "java.configuration.updateBuildConfiguration": "disabled",
+    "sentry.projects": [
+        "thats-pretty-cool-grp/pixel-editor"
+    ],
+    "java.dependency.packagePresentation": "hierarchical",
+    "cSpell.enabled": false,
+    "java.dependency.syncWithFolderExplorer": true
+}

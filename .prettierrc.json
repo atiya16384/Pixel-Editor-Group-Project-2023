@@ -1,0 +1,21 @@
+{
+    "tabWidth": 2,
+    "useTabs": false,
+    "semi": true,
+    "printWidth": 90,
+    "bracketSpacing": true,
+    "insertPragma": true,
+    "proseWrap": "always",
+    "overrides": [
+        {
+          "files": [
+            "src/**/*.java"
+          ],
+          "options": {
+            "printWidth": 90,
+            "tabWidth": 2,
+            "useTabs": false
+          }
+        }
+    ]
+}
